@@ -1,0 +1,190 @@
+<html>
+    <head></head>    
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+    <title>TEST</title>   
+    <script src="./vendors/jquery/jquery.min.js"></script>
+    <script>    
+        $(document).ready(function(){          
+	        $("#get_token").click(function(){
+		        str_bh=$("#bh").val();
+                str_pwd=$("#pwd").val();
+                str_device_id=$("#device_id").val();
+                str_db_json = $("#db_json").val();
+		        $.post("/ext/t",{
+                    bh:str_bh,
+                    pwd:str_pwd,
+                    device_id:str_device_id,
+                    db_json:str_db_json
+                    },
+                function(result){
+			        $("#token_id").html(result);
+                    str_json = JSON.parse(result);                    
+                    if(str_json.status == 'Ok'){
+                        str_get_token =str_json.data_result.token;                        
+                        $(".token").val(str_get_token);
+                    }
+		        });
+	        });
+            $("#get_patient").click(function(){                      
+                str_token=$("#token_p").val();                                              
+		        $.post("/ext/get_patient",{                    
+                    token:str_token                   
+                    },
+                function(result){                    
+			        $("#patient_if").html(result);
+		        });
+	        });
+            $("#get_patient_info").click(function(){
+		        str_patient=$("#patient_id").val();
+                str_token=$("#token").val();                
+		        $.post("/ext/get_patient_info",{
+                    patient_id:str_patient,
+                    token:str_token                   
+                    },
+                function(result){
+			        $("#patient_info").html(result);
+		        });
+	        });
+            $("#set_patient_init").click(function(){
+		        str_patient=$("#set_p_init").val();
+                str_token=$("#token_init").val();
+                str_db_json = $("#db_json_init").val();                
+		        $.post("/ext/set_patient_init",{
+                    patient_id:str_patient,
+                    db_json:str_db_json,
+                    token:str_token                   
+                    },
+                function(result){
+			        $("#init_return").html(result);
+		        });
+	        });
+            $("#start_job").click(function(){                
+		        str_patient=$("#start_p_id").val();
+                str_token=$("#token_start").val();
+                str_db_json = $("#db_json_start").val();
+                $.post("/ext/start_job",{
+                    patient_id:str_patient,
+                    db_json:str_db_json,
+                    token:str_token                   
+                    },
+                function(result){
+			        $("#start_return").html(result);
+                    str_json = JSON.parse(result);                    
+                    if(str_json.status == 'Ok'){
+                        str_job_id =str_json.data_result;                        
+                        $(".job_id").val(str_job_id);
+                    }
+		        });
+	        });
+            $("#end_job").click(function(){                
+		        str_patient_id=$("#end_patient_id").val();
+                str_token=$("#token_end").val();
+                str_db_json = $("#db_json_end").val();
+                $.post("/ext/end_job",{
+                    patient_id:str_patient_id,
+                    db_json:str_db_json,
+                    token:str_token                   
+                    },
+                function(result){
+			        $("#end_return").html(result);
+		        });
+	        });
+            $("#send_db").click(function(){                
+		        str_job_id=$("#job_id").val();
+                str_token=$("#token_end").val();
+                str_db_json = $("#db_json_end").val();
+                str_db_type = $("#db_type").val();
+                str_db_time = $("#db_time").val();
+                str_send_type = $("#send_type").val();
+                $.post("/ext/send_db",{
+                    job_id:str_job_id,
+                    db_json:str_db_json,
+                    token:str_token,
+                    db_type:str_db_type,
+                    db_time:str_db_time,
+                    send_type:str_send_type
+                    },
+                function(result){
+			        $("#send_return").html(result);
+		        });
+	        });
+            $("#get_job_last_db").click(function(){                
+		        str_job_id=$("#job_id_get_last_db").val();                
+                $.post("/ext/get_job_czy_db",{
+                    job_id:str_job_id                    
+                    },
+                function(result){
+			        $("#get_job_last_db_return").html(result);
+		        });
+	        });
+        });
+    </script>
+    <body>
+        <H1>TEST</H1><a href='/map_test'>地图测试</a>
+        <div>
+            <h2>登录测试</h2>            
+                账号:<input type='text' name='bh' id ='bh' value='001'><br>
+                密码:<input type='password' name='pwd' id ='pwd' value='001'><br>
+                设备ID<input type='text' name='device_id' id ='device_id' value='test_device_1234'><br>
+                坐标地址<input type='text' name='db_json' id = 'db_json' value='{"x":"123","y":"456"}'>
+                <button id="get_token">提交</button><br>
+                <span id="token_id"></span>        
+        </div>
+         <div>
+            <h2>获取10条患者信息</h2>              
+                token:<input type='text' class='token' id='token_p' name='token_p'>
+                <button id='get_patient'>查询</button><br>
+                <span id='patient_if'></span>
+        </div>
+         <div>
+            <h2>获取患者信息</h2>            
+                patient_id:<input type='text' id ='patient_id' name='patient_id' value='00688ddc62b6977b3eacb55d6cadd1f3'><br>
+                token:<input type='text' class='token' id='token' name='token'>
+                <button id='get_patient_info'>查询</button><br>
+                <span id='patient_info'></span>
+        </div>
+        <div>
+            <h2>更新患者地址坐标</h2>                       
+                patient_id:<input type='text' id='set_p_init' name='patient_id' value='00688ddc62b6977b3eacb55d6cadd1f3'><br>
+                坐标地址<input type='text' id='db_json_init' name='db_json' value='{"x":"123","y":"456"}'><br>
+                token:<input type='text' id='token_init' class='token' name='token'>
+                <button id ='set_patient_init'>提交</button><br>
+                <span id="init_return"></span>            
+        </div>
+        <div>
+            <h2>开始新的任务</h2>                       
+                patient_id:<input type='text' id='start_p_id' name='patient_id' value='00688ddc62b6977b3eacb55d6cadd1f3'><br>
+                坐标地址<input type='text' id='db_json_start' name='db_json' value='{"x":"123","y":"456"}'><br>
+                token:<input type='text' id='token_start' class='token' name='token'>
+                <button id ='start_job'>提交</button><br>
+                <span id="start_return"></span>            
+        </div>
+        <div>
+            <h2>结束已开始的任务</h2>                       
+                patient_id:<input type='text' id='end_patient_id' name='patient_id' value='00688ddc62b6977b3eacb55d6cadd1f3'><br>
+                坐标地址<input type='text' id='db_json_end' name='db_json' value='{"x":"123","y":"456"}'><br>
+                token:<input type='text' id='token_end' class='token' name='token'>
+                <button id ='end_job'>提交</button><br>
+                <span id="end_return"></span>            
+        </div>
+        <div>
+            <h2>发送当前坐标地址</h2>                       
+                任务id:<input type='text' id='job_id' class='job_id' name='job_id'><br>
+                坐标地址<input type='text' id='db_json_end' name='db_json' value='{"x":"123","y":"456"}'><br>
+                设备时间<input type='text' id='db_time' name='db_time' value='2020-01-01 14:56:01'><br>
+                坐标类型<input type='text' id='db_type' name='db_type' value='1'><span>1:GPS,2:IP,3:通讯基站,4:其他</span><br>
+                发送类型<input type='text' id='send_type' name='send_type' value='0'><span>0:实时传送,1:补充传送</span><br>
+                token:<input type='text' id='token_end' class='token' name='token'>
+                <button id ='send_db'>提交</button><br>
+                <span id="send_return"></span>            
+        </div>
+         <div>
+            <h2>根据任务获取护理院最后一次上传坐标</h2>                       
+                任务id:<input type='text' id='job_id_get_last_db' class='job_id' name='job_id'><br>               
+                <button id ='get_job_last_db'>提交</button><br>
+                <span id="get_job_last_db_return"></span>            
+        </div>
+    </body>
+    
+</html>

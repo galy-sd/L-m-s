@@ -1,0 +1,171 @@
+<html>
+    <head></head>    
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />      
+    <style type="text/css">  
+        html{height:100%}  
+        body{height:100%;margin:0px;padding:0px}  
+        #container{height:100%}  
+    </style>
+    <title>TEST</title>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=7eyfZA8XiaNmvUaAUd4MdC5E1b4CyQft"></script>
+    <script src="./vendors/jquery/jquery.min.js"></script>
+    <script>
+        var map;
+        //初始化地图
+        function init_db(){                 
+            //var y = 36.683524;
+            //var x = 117.068754;
+            //var ggPoint = new BMap.Point(x,y);            
+            map = new BMap.Map("container");
+            map.enableScrollWheelZoom(true); 
+            var point = new BMap.Point(116.404, 39.915);// 创建点坐标  
+            map.centerAndZoom(point, 18);
+            map.addControl(new BMap.NavigationControl());    
+            map.addControl(new BMap.ScaleControl());     
+            map.setDefaultCursor("crosshair");
+            map.panTo(point);
+            //var mk = new BMap.Marker(point);
+            //map.centerAndZoom(ggPoint, 18);  
+            //map.addOverlay(new BMap.Marker(ggPoint));
+            //map.panTo(ggPoint);         
+            // 创建地图实例                
+           // var convertor = new BMap.Convertor();                
+            //var pointArr = [];               
+            //pointArr.push(ggPoint);
+            //convertor.translate(pointArr,1,5,function(data){
+            //    if(data.status === 0){                      
+            //        var point = data.points[0];
+            //        map.centerAndZoom(point, 18);
+            //        var mk = new BMap.Marker(point);
+            //        map.addOverlay(mk);
+            //        map.panTo(point);
+            //    }
+           // });
+        }
+        //定位
+        function get_db(){            
+            if (navigator.geolocation){                
+                var options = {enableHighAcuracy:true,timeout:60000};                
+                navigator.geolocation.getCurrentPosition(function(data){                    
+                    var x = data.coords.latitude;
+                    var y = data.coords.longitude;
+                    var ggPoint = new BMap.Point(x,y);
+                    var convertor = new BMap.Convertor();                
+                    var pointArr = [];               
+                    pointArr.push(ggPoint);
+                    convertor.translate(pointArr,1,5,function(data){
+                        if(data.status === 0){                      
+                            var point = data.points[0];
+                            map.centerAndZoom(point, 18);
+                            var mk = new BMap.Marker(point);
+                            map.addOverlay(mk);
+                            map.panTo(point);
+                        }
+                    });
+                },function(err){
+                     if(err.code == 1) {
+                        alert("Error: Access is denied!"+err.message);
+                    }else if( err.code == 2) {
+                        alert("Error: Position is unavailable!");
+                    }
+                },options);
+            }else{
+                alert('该浏览器不支持获取地理位置。');
+            }
+        }
+        function get_db_view(){
+            var patient_icon = new BMap.Icon("./images/makers/green.png",new BMap.Size(64,64),{
+                imageSize:new BMap.Size(64,64),
+                imageOffset: new BMap.Size(0, 0 - 10 * 25)   
+            });
+            var user_icon = new BMap.Icon("./images/makers/blue.png",new BMap.Size(64,64),{
+                imageSize:new BMap.Size(64,64),              
+                imageOffset: new BMap.Size(0, 0 - 10 * 25)   
+            });
+            //获取后台数据
+            $.get("/test/get_job_all_info",function(result){
+                    json = JSON.parse(result);                    
+                    if (json.status =='Err'){return}
+                    data_result = json.data_result;
+                    for(item in data_result){ 
+                        p_info = data_result[item].p_info;                        
+                        if (p_info != null){
+                            p_x=Number(p_info.p_x);
+                            p_y=Number(p_info.p_y);
+                            p_name = p_info.p_name;
+                            u_name = p_info.xm;
+                            pt =new BMap.Point(p_y,p_x);
+                            
+                            label = new BMap.Label("用户姓名:"+p_name+" 服务人员:"+u_name,{
+                                position:pt,
+                                offset:new BMap.Size(30,-30)});
+                            label.setStyle({
+                                color : "green",
+                                fontSize : "12px",
+                                height : "20px",
+                                lineHeight : "20px",
+                                fontFamily:"微软雅黑"      
+                            });
+                            add_maker(patient_icon,pt,label);
+                        }
+                        u_info = data_result[item].u_info;
+                        if (u_info != null){
+                            u_x=Number(u_info[0].position_x);
+                            u_y =Number(u_info[0].position_y);
+                            u_rdt = u_info[0].record_datetime;                            
+                            pt = new BMap.Point(u_y,u_x);                            
+                            label = new BMap.Label(u_name,{position:pt,offset:new BMap.Size(30,-30)});
+                            label.setStyle({
+                                color : "blue",
+                                fontSize : "9px",
+                                height : "16px",
+                                lineHeight : "16px",
+                                fontFamily:"微软雅黑"      
+                            });
+                            add_maker(user_icon,pt,label);
+                        }
+                    }                    
+                });
+         }
+        //定标地图
+        function add_maker( bicon, bpt,label){
+            var marker = new BMap.Marker(bpt,{
+                icon:bicon,
+                title:"test"
+                });
+            //var marker = new BMap.Marker(bpt);
+            map.addOverlay(marker);
+            map.addOverlay(label);            
+            map.panTo(bpt);
+            
+        }
+        //监听事件函数
+        $(document).ready(function(){           
+            $("#test_db").click(function(){
+                get_db();		        
+	        });
+            $("#init_db").click(function(){
+                init_db();		        
+	        });
+            $("#get_db_view").click(function(){
+                init_db();
+                get_db_view();       
+	        });
+        });
+    </script>
+    <body>
+        <H1>TEST</H1>        
+        <div>
+            <button id='init_db'>初始化地图</button> 
+            <button id='test_db'>测试定位</button>
+            <button id='get_db_view'>测试标点</button>
+            <br>            
+        </div>
+        <div>
+            <h2>地图测试</h2>
+            <div id="container"></div>             
+        </div>
+    </body>
+    
+</html>
