@@ -90,7 +90,7 @@
                     json = JSON.parse(result);                    
                     if (json.status =='Err'){return}
                     data_result = json.data_result;
-                    for(item in data_result){ 
+                    for(var item = 0; item < data_result.length; item++){ 
                         p_info = data_result[item].p_info;                        
                         if (p_info != null){
                             p_x=Number(p_info.p_x);
