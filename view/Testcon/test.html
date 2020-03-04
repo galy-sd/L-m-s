@@ -93,7 +93,7 @@
             $("#send_db").click(function(){                
 		        str_job_id=$("#job_id").val();
                 str_token=$("#token_end").val();
-                str_db_json = $("#db_json_end").val();
+                str_db_json = $("#db_json_now").val();
                 str_db_type = $("#db_type").val();
                 str_db_time = $("#db_time").val();
                 str_send_type = $("#send_type").val();
@@ -127,7 +127,7 @@
                 账号:<input type='text' name='bh' id ='bh' value='001'><br>
                 密码:<input type='password' name='pwd' id ='pwd' value='001'><br>
                 设备ID<input type='text' name='device_id' id ='device_id' value='test_device_1234'><br>
-                坐标地址<input type='text' name='db_json' id = 'db_json' value='{"x":"123","y":"456"}'>
+                坐标地址<input type='text' name='db_json' id = 'db_json' value='{"x":"36.6862","y":"117.079664"}'>
                 <button id="get_token">提交</button><br>
                 <span id="token_id"></span>        
         </div>
@@ -147,7 +147,7 @@
         <div>
             <h2>更新患者地址坐标</h2>                       
                 patient_id:<input type='text' id='set_p_init' name='patient_id' value='00688ddc62b6977b3eacb55d6cadd1f3'><br>
-                坐标地址<input type='text' id='db_json_init' name='db_json' value='{"x":"123","y":"456"}'><br>
+                坐标地址<input type='text' id='db_json_init' name='db_json' value='{"x":"36.6862","y":"117.079664"}'><br>
                 token:<input type='text' id='token_init' class='token' name='token'>
                 <button id ='set_patient_init'>提交</button><br>
                 <span id="init_return"></span>            
@@ -155,7 +155,7 @@
         <div>
             <h2>开始新的任务</h2>                       
                 patient_id:<input type='text' id='start_p_id' name='patient_id' value='00688ddc62b6977b3eacb55d6cadd1f3'><br>
-                坐标地址<input type='text' id='db_json_start' name='db_json' value='{"x":"123","y":"456"}'><br>
+                坐标地址<input type='text' id='db_json_start' name='db_json' value='{"x":"36.6862","y":"117.079664"}'><br>
                 token:<input type='text' id='token_start' class='token' name='token'>
                 <button id ='start_job'>提交</button><br>
                 <span id="start_return"></span>            
@@ -163,7 +163,7 @@
         <div>
             <h2>结束已开始的任务</h2>                       
                 patient_id:<input type='text' id='end_patient_id' name='patient_id' value='00688ddc62b6977b3eacb55d6cadd1f3'><br>
-                坐标地址<input type='text' id='db_json_end' name='db_json' value='{"x":"123","y":"456"}'><br>
+                坐标地址<input type='text' id='db_json_end' name='db_json' value='{"x":"36.6862","y":"117.079664"}'><br>
                 token:<input type='text' id='token_end' class='token' name='token'>
                 <button id ='end_job'>提交</button><br>
                 <span id="end_return"></span>            
@@ -171,7 +171,7 @@
         <div>
             <h2>发送当前坐标地址</h2>                       
                 任务id:<input type='text' id='job_id' class='job_id' name='job_id'><br>
-                坐标地址<input type='text' id='db_json_end' name='db_json' value='{"x":"123","y":"456"}'><br>
+                坐标地址<input type='text' id='db_json_now' name='db_json' value='{"x":"36.6860","y":"117.079600"}'><br>
                 设备时间<input type='text' id='db_time' name='db_time' value='2020-01-01 14:56:01'><br>
                 坐标类型<input type='text' id='db_type' name='db_type' value='1'><span>1:GPS,2:IP,3:通讯基站,4:其他</span><br>
                 发送类型<input type='text' id='send_type' name='send_type' value='0'><span>0:实时传送,1:补充传送</span><br>

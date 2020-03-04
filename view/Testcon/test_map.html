@@ -117,7 +117,9 @@
                             u_y =Number(u_info[0].position_y);
                             u_rdt = u_info[0].record_datetime;                            
                             pt = new BMap.Point(u_y,u_x);                            
-                            label = new BMap.Label(u_name,{position:pt,offset:new BMap.Size(30,-30)});
+                            label = new BMap.Label(u_name,{
+                                position:pt,
+                                offset:new BMap.Size(30,-30)});
                             label.setStyle({
                                 color : "blue",
                                 fontSize : "9px",
