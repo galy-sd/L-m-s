@@ -75,13 +75,15 @@
             }
         }
         function get_db_view(){
-            var patient_icon = new BMap.Icon("./images/makers/green.png",new BMap.Size(64,64),{
-                imageSize:new BMap.Size(64,64),
-                imageOffset: new BMap.Size(0, 0 - 10 * 25)   
+            var patient_icon = new BMap.Icon("./images/makers/green.png",new BMap.Size(32,32),{
+                anchor: new BMap.Size(0, 32), 
+                imageSize:new BMap.Size(32,32)
+                //imageOffset: new BMap.Size(0, 0 - 1 * 32)   
             });
-            var user_icon = new BMap.Icon("./images/makers/blue.png",new BMap.Size(64,64),{
-                imageSize:new BMap.Size(64,64),              
-                imageOffset: new BMap.Size(0, 0 - 10 * 25)   
+            var user_icon = new BMap.Icon("./images/makers/blue.png",new BMap.Size(32,32),{
+                anchor: new BMap.Size(0, 32), 
+                imageSize:new BMap.Size(32,32)              
+               // imageOffset: new BMap.Size(0, 0 - 1 * 32)   
             });
             //获取后台数据
             $.get("/test/get_job_all_info",function(result){
